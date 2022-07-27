@@ -1,0 +1,126 @@
+﻿@model AUTHDBContext
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  position: relative;
+  width: auto;
+}
+
+.mySlides {
+  display: none;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 40%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.next {
+  left: 36.33%;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+.caption-container {
+  text-align: center;
+  background-color: #222;
+  padding: 0px 0px;
+  color: white;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.column {
+  float: left;
+  width: 16.66%;
+}
+
+.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+</style>
+</head>
+</html>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<h2>Наша пятёрка самых популярных блюд!</h2>
+<h3>Надеемся они понравятся и вам!</h3>
+    @{
+        var list=Belarus1.Controllers.HomeController.fod.OrderByDescending(x => x.Amount).Take(5);
+    }
+<div class="container">
+    @{int countFoods=list.Count();
+            int i = 0;
+}
+  @foreach(var item in list){
+            i++;
+            var context = Model.Foods.Where(p => p.Id == item.Id).FirstOrDefault();
+            var base64 = Convert.ToBase64String(context.Image);
+        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+  <div class="mySlides">
+    <div class="numbertext">@i / @countFoods</div>
+    <a href="@Url.Action("Index","Foods")">
+
+      <img src="@imgSrc" style="width:40%" >
+    </a>
+  </div>
+
+ 
+
+  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+  <div class="caption-container">
+    <p id="caption"></p>
+  </div>
+
+
+  }
+</div>
+    
+
